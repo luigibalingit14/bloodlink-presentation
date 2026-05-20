@@ -1,0 +1,1840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BloodLink — COMPROG2 Final Project Presentation | University of Makati</title>
+  
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Syntax Highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  
+  <style>
+    /* ==================== CSS VARIABLES & THEME ==================== */
+    :root {
+      /* Brand Colors */
+      --crimson: #dc143c;
+      --crimson-light: #ff4757;
+      --crimson-dark: #8b0000;
+      --blood-gradient: linear-gradient(135deg, #ff6b6b, #dc143c, #8b0000);
+      --umak-gold: #FFD700;
+      
+      /* Backgrounds */
+      --bg-primary: #0a0204;
+      --bg-secondary: #110507;
+      --bg-card: rgba(255, 255, 255, 0.03);
+      --bg-glass: rgba(220, 20, 60, 0.06);
+      --bg-glass-hover: rgba(220, 20, 60, 0.12);
+      
+      /* Text */
+      --text-primary: #ffffff;
+      --text-secondary: #d4a5a5;
+      --text-muted: #8b6b6b;
+      --text-inverse: #0a0204;
+      
+      /* UI Elements */
+      --border-glass: rgba(220, 20, 60, 0.25);
+      --border-glass-hover: rgba(220, 20, 60, 0.5);
+      --shadow-glass: 0 8px 32px rgba(139, 0, 0, 0.3);
+      --shadow-glass-hover: 0 12px 48px rgba(220, 20, 60, 0.4);
+      
+      /* Spacing System */
+      --space-xs: 8px;
+      --space-sm: 16px;
+      --space-md: 24px;
+      --space-lg: 32px;
+      --space-xl: 48px;
+      --space-xxl: 64px;
+      
+      /* Typography */
+      --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --text-xs: 12px;
+      --text-sm: 14px;
+      --text-base: 16px;
+      --text-lg: 20px;
+      --text-xl: 24px;
+      --text-2xl: 32px;
+      --text-3xl: 40px;
+      --text-4xl: 48px;
+      --text-5xl: 64px;
+      --text-6xl: 80px;
+      
+      /* Animation */
+      --transition-fast: 150ms ease;
+      --transition-base: 300ms ease;
+      --transition-slow: 500ms ease;
+    }
+
+    /* ==================== RESET & BASE ==================== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-snap-type: y mandatory;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ==================== PRESENTATION CONTAINER ==================== */
+    .presentation {
+      position: relative;
+      min-height: 100vh;
+    }
+
+    /* ==================== SLIDE BASE ==================== */
+    .slide {
+      min-height: 100vh;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: var(--space-md) var(--space-lg);
+      position: relative;
+      scroll-snap-align: start;
+      overflow: hidden;
+    }
+
+    .slide::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: 
+        radial-gradient(ellipse at 20% 10%, rgba(220, 20, 60, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 90%, rgba(139, 0, 0, 0.12) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .slide-content {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    /* ==================== SLIDE NUMBER & PROGRESS ==================== */
+    .slide-meta {
+      position: absolute;
+      top: var(--space-sm);
+      right: var(--space-lg);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      z-index: 10;
+    }
+
+    .slide-number {
+      font-size: var(--text-xs);
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .progress-bar {
+      width: 120px;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--blood-gradient);
+      border-radius: 2px;
+      transition: width var(--transition-base);
+    }
+
+    /* ==================== TYPOGRAPHY ==================== */
+    .slide-label {
+      font-size: var(--text-xs);
+      font-weight: 700;
+      color: var(--crimson-light);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: var(--space-xs);
+      opacity: 0;
+      animation: fadeInUp 0.4s ease forwards;
+      animation-delay: 0.1s;
+    }
+
+    .slide-title {
+      font-size: var(--text-4xl);
+      font-weight: 800;
+      text-align: center;
+      line-height: 1.2;
+      opacity: 0;
+      animation: fadeInUp 0.5s ease forwards;
+      animation-delay: 0.2s;
+    }
+
+    .slide-title span {
+      background: var(--blood-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .slide-subtitle {
+      font-size: var(--text-lg);
+      color: var(--text-secondary);
+      text-align: center;
+      max-width: 700px;
+      opacity: 0;
+      animation: fadeInUp 0.5s ease forwards;
+      animation-delay: 0.3s;
+    }
+
+    .heading-divider {
+      width: 60px;
+      height: 4px;
+      background: var(--blood-gradient);
+      border-radius: 2px;
+      margin: var(--space-sm) auto;
+      opacity: 0;
+      animation: fadeIn 0.4s ease forwards;
+      animation-delay: 0.4s;
+    }
+
+    /* ==================== ANIMATIONS ==================== */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* ==================== TITLE SLIDE ==================== */
+    .slide-title-hero {
+      text-align: center;
+      background: linear-gradient(180deg, rgba(10, 2, 4, 0.8) 0%, rgba(17, 5, 7, 0.95) 100%),
+                  url('https://images.unsplash.com/photo-1579154204601-01588f351e67?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat;
+      padding-top: var(--space-xs);
+    }
+
+    .slide-title-hero .slide-content {
+      gap: var(--space-sm);
+    }
+
+    /* LOGO PLACEHOLDER STYLES */
+    .logo-placeholder {
+      width: 200px;
+      height: 200px;
+      background: transparent;
+      border-radius: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto var(--space-xs);
+      cursor: pointer;
+      transition: all var(--transition-base);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .logo-placeholder:hover {
+      background: transparent;
+      transform: scale(1.05);
+    }
+
+    .logo-placeholder img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      position: absolute;
+      inset: 0;
+    }
+
+    .logo-placeholder .placeholder-text {
+      font-size: var(--text-xs);
+      color: var(--text-muted);
+      text-align: center;
+      padding: var(--space-xs);
+      z-index: 1;
+    }
+
+    .logo-placeholder .placeholder-icon {
+      font-size: 48px;
+      margin-bottom: var(--space-xs);
+      opacity: 0.5;
+    }
+
+    .blood-drop-hero {
+      font-size: 96px;
+      margin-bottom: var(--space-md);
+      filter: drop-shadow(0 0 30px rgba(220, 20, 60, 0.6));
+      animation: pulse 3s ease-in-out infinite, float 4s ease-in-out infinite;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards, pulse 3s ease-in-out 0.6s infinite, float 4s ease-in-out 0.6s infinite;
+    }
+
+    .project-name {
+      font-size: var(--text-5xl);
+      font-weight: 900;
+      background: var(--blood-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: var(--space-xs);
+      letter-spacing: -2px;
+    }
+
+    .project-tagline {
+      font-size: var(--text-lg);
+      color: var(--text-secondary);
+      margin-bottom: var(--space-sm);
+    }
+
+    .course-info {
+      font-size: var(--text-xs);
+      color: var(--text-muted);
+      letter-spacing: 1px;
+      margin-bottom: var(--space-md);
+    }
+
+    .umak-branding {
+      position: absolute;
+      top: 40px;
+      left: 50px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      z-index: 20;
+    }
+
+    .branding-logos {
+      display: flex;
+      gap: 10px;
+    }
+
+    .branding-texts {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      text-align: left;
+      margin-left: 6px;
+    }
+
+    .umak-logo-small {
+      width: 50px;
+      height: 50px;
+      background: transparent;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .umak-logo-small img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      position: absolute;
+      inset: 0;
+    }
+
+    .umak-logo-small:hover {
+      transform: scale(1.1);
+    }
+
+    .umak-text {
+      font-family: "Trajan Pro", "Times New Roman", Times, serif;
+      font-size: 24px;
+      font-weight: normal;
+      color: #ffffff;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .ccis-text {
+      font-family: var(--font-sans);
+      font-size: 13.5px;
+      font-weight: 400;
+      color: #eaeaea;
+      letter-spacing: 1.2px;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+    }
+
+    /* ==================== MEMBER GRID ==================== */
+    .members-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: var(--space-sm);
+      width: 100%;
+      max-width: 1000px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards;
+      animation-delay: 0.5s;
+    }
+
+    .member-card {
+      background: var(--bg-glass);
+      border: 1px solid var(--border-glass);
+      border-radius: 12px;
+      padding: var(--space-sm);
+      text-align: center;
+      backdrop-filter: blur(12px);
+      transition: all var(--transition-base);
+      cursor: default;
+    }
+
+    .member-card:hover {
+      border-color: var(--crimson);
+      background: var(--bg-glass-hover);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-glass-hover);
+    }
+
+    .member-name {
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .member-role {
+      font-size: 11px;
+      color: var(--crimson-light);
+      font-weight: 500;
+    }
+
+    /* ==================== INFO BOXES ==================== */
+    .info-box {
+      background: var(--bg-glass);
+      border: 1px solid var(--border-glass);
+      border-left: 4px solid var(--crimson);
+      border-radius: 0 12px 12px 0;
+      padding: var(--space-sm) var(--space-md);
+      max-width: 900px;
+      font-size: var(--text-sm);
+      color: var(--text-secondary);
+      line-height: 1.5;
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      animation: fadeInUp 0.5s ease forwards;
+    }
+
+    .info-box strong {
+      color: var(--crimson-light);
+      font-weight: 600;
+    }
+
+    .info-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      justify-content: center;
+      margin-top: var(--space-md);
+    }
+
+    .info-badge {
+      background: var(--bg-card);
+      border: 1px solid var(--border-glass);
+      border-radius: 8px;
+      padding: var(--space-xs) var(--space-sm);
+      font-size: var(--text-sm);
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all var(--transition-fast);
+    }
+
+    .info-badge:hover {
+      border-color: var(--crimson);
+      background: var(--bg-glass-hover);
+    }
+
+    .info-badge i {
+      color: var(--crimson-light);
+      font-size: 14px;
+    }
+
+    .info-badge strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    /* ==================== FEATURE CARDS ==================== */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--space-md);
+      width: 100%;
+      max-width: 1100px;
+    }
+
+    .feature-card {
+      background: var(--bg-glass);
+      border: 1px solid var(--border-glass);
+      border-radius: 16px;
+      padding: var(--space-lg);
+      backdrop-filter: blur(12px);
+      transition: all var(--transition-base);
+      opacity: 0;
+      animation: fadeInUp 0.5s ease forwards;
+    }
+
+    .feature-card:nth-child(1) { animation-delay: 0.1s; }
+    .feature-card:nth-child(2) { animation-delay: 0.15s; }
+    .feature-card:nth-child(3) { animation-delay: 0.2s; }
+    .feature-card:nth-child(4) { animation-delay: 0.25s; }
+    .feature-card:nth-child(5) { animation-delay: 0.3s; }
+    .feature-card:nth-child(6) { animation-delay: 0.35s; }
+    .feature-card:nth-child(7) { animation-delay: 0.4s; }
+
+    .feature-card:hover {
+      border-color: var(--crimson);
+      background: var(--bg-glass-hover);
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-glass-hover);
+    }
+
+    .feature-icon {
+      font-size: 32px;
+      margin-bottom: var(--space-sm);
+      background: var(--blood-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .feature-title {
+      font-size: var(--text-lg);
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: var(--space-xs);
+    }
+
+    .feature-desc {
+      font-size: var(--text-sm);
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ==================== SCREENSHOT PLACEHOLDER ==================== */
+    .screenshot-frame {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--border-glass);
+      box-shadow: var(--shadow-glass);
+      border-radius: 16px;
+      padding: var(--space-xs);
+      max-width: 900px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: all var(--transition-base);
+      cursor: pointer;
+      opacity: 0;
+      animation: fadeInUp 0.5s ease forwards;
+    }
+
+    .screenshot-frame:has(.placeholder-content) {
+      min-height: 400px;
+      border: 2px dashed var(--border-glass);
+      background: var(--bg-secondary);
+    }
+
+    .screenshot-frame:hover {
+      border-color: var(--crimson-light);
+      box-shadow: var(--shadow-glass-hover);
+      transform: scale(1.02);
+    }
+
+    /* ENLARGED SCREENSHOT BACKDROP */
+    .screenshot-frame.enlarged {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      max-width: 100vw;
+      transform: none !important;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(10px);
+      z-index: 9999;
+      border: none;
+      border-radius: 0;
+      cursor: zoom-out;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-xl);
+      margin: 0;
+    }
+
+    .screenshot-frame img {
+      width: 100%;
+      height: auto;
+      max-height: 48vh;
+      object-fit: contain;
+      display: block;
+      border-radius: 12px;
+      transition: all var(--transition-base);
+    }
+
+    .screenshot-frame.enlarged img {
+      max-width: 90vw;
+      max-height: 90vh;
+      object-fit: contain;
+      box-shadow: 0 10px 50px rgba(0,0,0,0.5);
+      border-radius: 16px;
+    }
+
+    .screenshot-frame .placeholder-content {
+      text-align: center;
+      z-index: 1;
+    }
+
+    .screenshot-icon {
+      font-size: 64px;
+      margin-bottom: var(--space-md);
+      opacity: 0.3;
+      background: var(--blood-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .screenshot-label {
+      font-size: var(--text-base);
+      color: var(--text-secondary);
+      text-align: center;
+      margin-bottom: var(--space-xs);
+      font-weight: 600;
+    }
+
+    .screenshot-hint {
+      font-size: var(--text-xs);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .screenshot-hint i {
+      color: var(--crimson-light);
+      animation: pulse 2s infinite;
+    }
+
+    /* ==================== SQL CODE BLOCKS ==================== */
+    .sql-section {
+      width: 100%;
+      max-width: 1100px;
+    }
+
+    .sql-card {
+      background: var(--bg-glass);
+      border: 1px solid var(--border-glass);
+      border-radius: 16px;
+      margin-bottom: var(--space-md);
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      animation: fadeInUp 0.4s ease forwards;
+    }
+
+    .sql-card:nth-child(1) { animation-delay: 0.05s; }
+    .sql-card:nth-child(2) { animation-delay: 0.1s; }
+    .sql-card:nth-child(3) { animation-delay: 0.15s; }
+    .sql-card:nth-child(4) { animation-delay: 0.2s; }
+    .sql-card:nth-child(5) { animation-delay: 0.25s; }
+    .sql-card:nth-child(6) { animation-delay: 0.3s; }
+    .sql-card:nth-child(7) { animation-delay: 0.35s; }
+    .sql-card:nth-child(8) { animation-delay: 0.4s; }
+    .sql-card:nth-child(9) { animation-delay: 0.45s; }
+
+    .sql-header {
+      background: rgba(220, 20, 60, 0.15);
+      padding: var(--space-sm) var(--space-md);
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: var(--crimson-light);
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      border-bottom: 1px solid var(--border-glass);
+    }
+
+    .sql-header i {
+      font-size: 14px;
+    }
+
+    .sql-code {
+      padding: var(--space-md);
+      font-family: var(--font-mono);
+      font-size: var(--text-sm);
+      line-height: 1.7;
+      overflow-x: auto;
+    }
+
+    .sql-code .token.keyword { color: #ff6b6b; font-weight: 600; }
+    .sql-code .token.table { color: #ffd700; }
+    .sql-code .token.column { color: #87ceeb; }
+    .sql-code .token.value { color: #98fb98; }
+    .sql-code .token.comment { color: #6a737d; font-style: italic; }
+    .sql-code .token.function { color: #d2a8ff; }
+
+    /* ==================== DATABASE SCHEMA ==================== */
+    .schema-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-lg);
+      width: 100%;
+      max-width: 1100px;
+    }
+
+    .schema-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--bg-glass);
+      border: 1px solid var(--border-glass);
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      animation: fadeInUp 0.4s ease forwards;
+    }
+
+    .schema-table:nth-child(1) { animation-delay: 0.1s; }
+    .schema-table:nth-child(2) { animation-delay: 0.2s; }
+    .schema-table:nth-child(3) { animation-delay: 0.3s; }
+
+    .schema-table th {
+      background: rgba(220, 20, 60, 0.2);
+      padding: var(--space-sm) var(--space-md);
+      text-align: left;
+      font-size: var(--text-xs);
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--text-primary);
+      text-transform: uppercase;
+    }
+
+    .schema-table td {
+      padding: var(--space-sm) var(--space-md);
+      font-size: var(--text-sm);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-family: var(--font-mono);
+      color: var(--text-secondary);
+    }
+
+    .schema-table tr:last-child td { border-bottom: none; }
+    .schema-table tr:hover td { background: var(--bg-glass-hover); }
+
+    .schema-table .pk { color: #ffd700; font-weight: 600; }
+    .schema-table .fk { color: #87ceeb; }
+    .schema-table .type { color: #98fb98; font-weight: 500; }
+
+    /* ==================== ERD VISUAL ==================== */
+    .erd-container {
+      background: var(--bg-glass);
+      border: 1px solid var(--border-glass);
+      border-radius: 20px;
+      padding: var(--space-lg);
+      max-width: 900px;
+      width: 100%;
+      backdrop-filter: blur(12px);
+      opacity: 0;
+      animation: fadeInUp 0.5s ease forwards;
+    }
+
+    .erd-diagram {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-lg);
+      flex-wrap: wrap;
+      padding: var(--space-md);
+    }
+
+    .erd-entity {
+      background: rgba(0, 0, 0, 0.4);
+      border: 2px solid var(--border-glass);
+      border-radius: 12px;
+      padding: var(--space-md);
+      min-width: 200px;
+      transition: all var(--transition-base);
+    }
+
+    .erd-entity:hover {
+      border-color: var(--crimson);
+      background: var(--bg-glass-hover);
+      transform: translateY(-2px);
+    }
+
+    .erd-entity-title {
+      font-size: var(--text-base);
+      font-weight: 700;
+      color: var(--crimson-light);
+      margin-bottom: var(--space-sm);
+      padding-bottom: var(--space-xs);
+      border-bottom: 1px solid var(--border-glass);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .erd-field {
+      font-size: var(--text-sm);
+      color: var(--text-secondary);
+      padding: 4px 0;
+      font-family: var(--font-mono);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .erd-field .pk { color: #ffd700; }
+    .erd-field .fk { color: #87ceeb; }
+
+    .erd-connector {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--text-muted);
+      font-size: var(--text-xs);
+    }
+
+    .erd-connector .line {
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--crimson), transparent);
+      position: relative;
+    }
+
+    .erd-connector .line::after {
+      content: '↔';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 16px;
+      color: var(--crimson-light);
+      background: var(--bg-primary);
+      padding: 0 8px;
+    }
+
+    .erd-legend {
+      margin-top: var(--space-md);
+      padding-top: var(--space-md);
+      border-top: 1px solid var(--border-glass);
+      font-size: var(--text-xs);
+      color: var(--text-muted);
+      display: flex;
+      gap: var(--space-lg);
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .legend-dot.pk { background: #ffd700; }
+    .legend-dot.fk { background: #87ceeb; }
+    .legend-dot.role { background: var(--crimson-light); }
+
+    /* ==================== DEMO SLIDE ==================== */
+    .slide-demo {
+      background: linear-gradient(180deg, rgba(10, 2, 4, 0.85) 0%, rgba(17, 5, 7, 0.95) 100%),
+                  url('../screenshots/UMak-Facade-Admin-2024.jpg') center/cover no-repeat;
+      text-align: center;
+    }
+
+    .demo-badge {
+      font-size: var(--text-5xl);
+      margin-bottom: var(--space-md);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .demo-title {
+      font-size: var(--text-5xl);
+      font-weight: 900;
+      background: var(--blood-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: var(--space-sm);
+      letter-spacing: -2px;
+    }
+
+    .demo-subtitle {
+      font-size: var(--text-xl);
+      color: var(--text-secondary);
+      margin-bottom: var(--space-lg);
+    }
+
+    .demo-steps {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      justify-content: center;
+      margin: var(--space-lg) 0;
+    }
+
+    .demo-step {
+      background: var(--bg-card);
+      border: 1px solid var(--border-glass);
+      border-radius: 10px;
+      padding: var(--space-xs) var(--space-sm);
+      font-size: var(--text-sm);
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all var(--transition-fast);
+    }
+
+    .demo-step:hover {
+      border-color: var(--crimson);
+      background: var(--bg-glass-hover);
+      color: var(--text-primary);
+    }
+
+    .demo-step i {
+      color: var(--crimson-light);
+      font-size: 14px;
+    }
+
+    .demo-footer {
+      margin-top: var(--space-xl);
+      font-size: var(--text-xs);
+      color: var(--text-muted);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      opacity: 0.7;
+    }
+
+    /* ==================== NAVIGATION CONTROLS ==================== */
+    .nav-controls {
+      position: fixed;
+      bottom: var(--space-lg);
+      right: var(--space-lg);
+      display: flex;
+      gap: var(--space-xs);
+      z-index: 100;
+      opacity: 0;
+      transition: opacity var(--transition-base);
+    }
+
+    .nav-controls.visible {
+      opacity: 1;
+    }
+
+    .nav-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--bg-glass);
+      border: 1px solid var(--border-glass);
+      color: var(--text-primary);
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      backdrop-filter: blur(10px);
+    }
+
+    .nav-btn:hover {
+      background: var(--bg-glass-hover);
+      border-color: var(--crimson);
+      transform: translateY(-2px);
+    }
+
+    .nav-btn:active {
+      transform: translateY(0);
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* ==================== PRESENTER TOOLS ==================== */
+    .presenter-tools {
+      position: fixed;
+      bottom: var(--space-lg);
+      left: var(--space-lg);
+      display: flex;
+      gap: var(--space-xs);
+      z-index: 100;
+    }
+
+    .tool-btn {
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: 8px;
+      background: var(--bg-glass);
+      border: 1px solid var(--border-glass);
+      color: var(--text-secondary);
+      font-size: var(--text-xs);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      backdrop-filter: blur(10px);
+    }
+
+    .tool-btn:hover {
+      background: var(--bg-glass-hover);
+      border-color: var(--crimson);
+      color: var(--text-primary);
+    }
+
+    .tool-btn.active {
+      background: var(--crimson);
+      border-color: var(--crimson);
+      color: white;
+    }
+
+    /* ==================== RESPONSIVE ==================== */
+    @media (max-width: 1024px) {
+      .schema-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .project-name {
+        font-size: var(--text-5xl);
+      }
+      
+      .slide-title {
+        font-size: var(--text-3xl);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .slide {
+        padding: var(--space-lg) var(--space-md);
+      }
+      
+      .project-name {
+        font-size: var(--text-4xl);
+      }
+      
+      .slide-title {
+        font-size: var(--text-2xl);
+      }
+      
+      .members-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .erd-diagram {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .nav-controls,
+      .presenter-tools {
+        bottom: var(--space-md);
+        right: var(--space-md);
+        left: var(--space-md);
+        justify-content: center;
+      }
+    }
+
+    /* ==================== PRINT STYLES ==================== */
+    @media print {
+      .nav-controls,
+      .presenter-tools,
+      .slide-meta {
+        display: none;
+      }
+      
+      .slide {
+        min-height: auto;
+        page-break-after: always;
+        padding: 40px;
+      }
+    }
+
+    /* ==================== FULLSCREEN MODE ==================== */
+    .presentation:fullscreen {
+      background: var(--bg-primary);
+    }
+
+    .presentation:fullscreen .slide {
+      min-height: 100vh;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ==================== PRESENTATION CONTAINER ==================== -->
+<div class="presentation" id="presentation">
+
+  <!-- ==================== NAVIGATION CONTROLS ==================== -->
+  <div class="nav-controls" id="navControls">
+    <button class="nav-btn" id="prevBtn" title="Previous Slide (←)">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    <button class="nav-btn" id="nextBtn" title="Next Slide (→)">
+      <i class="fas fa-chevron-right"></i>
+    </button>
+    <button class="nav-btn" id="fullscreenBtn" title="Toggle Fullscreen (F)">
+      <i class="fas fa-expand"></i>
+    </button>
+  </div>
+
+  <!-- ==================== PRESENTER TOOLS ==================== -->
+  <div class="presenter-tools">
+    <button class="tool-btn" id="notesToggle" title="Toggle Presenter Notes">
+      <i class="fas fa-sticky-note"></i> Notes
+    </button>
+    <button class="tool-btn" id="jumpBtn" title="Jump to Slide">
+      <i class="fas fa-list"></i> Jump
+    </button>
+  </div>
+
+  <!-- ==================== SLIDE 1: TITLE ==================== -->
+  <section class="slide slide-title-hero" id="slide1" data-slide="1">
+    <div class="slide-meta">
+      <span class="slide-number">01 / 13</span>
+      <div class="progress-bar"><div class="progress-fill" style="width: 7.7%"></div></div>
+    </div>
+
+    <!-- UNIVERSITY OF MAKATI BRANDING TOP LEFT -->
+    <div class="umak-branding">
+      <div class="branding-logos">
+        <div class="umak-logo-small" title="University of Makati">
+          <img src="../images/UMak-Logo-Registered-Favicon.png" alt="University of Makati Logo">
+        </div>
+        <div class="umak-logo-small" title="CCIS">
+          <img src="../images/CCIS-Logo-Official-1-1-705x705.png" alt="CCIS Logo">
+        </div>
+      </div>
+      <div class="branding-texts">
+        <div class="umak-text">UNIVERSITY OF MAKATI</div>
+        <div class="ccis-text">College of Computing and Information Sciences</div>
+      </div>
+    </div>
+
+    <div class="slide-content">
+      <!-- BLOODLINK LOGO -->
+      <div class="logo-placeholder" title="BloodLink Logo">
+        <img src="../images/bloodlink-logo.png" alt="BloodLink Logo">
+      </div>
+      
+      <h1 class="project-name">BloodLink</h1>
+      <p class="project-tagline">Blood Bank Management System</p>
+      <p class="course-info">
+        Final Project • Computer Programming 2 (COMPROG2) & Information Management (INFOMAN)<br>
+        Group 1 • I-AINS • Prof. Roel Traballo & Prof. Mary Ellaine Cervantes
+      </p>
+      
+      <div class="heading-divider"></div>
+      
+      <div class="members-grid">
+        <div class="member-card"><div class="member-name">Tolentino</div><div class="member-role">Login System</div></div>
+        <div class="member-card"><div class="member-name">Villanueva</div><div class="member-role">Dashboard</div></div>
+        <div class="member-card"><div class="member-name">De Leon</div><div class="member-role">Introduction</div></div>
+        <div class="member-card"><div class="member-name">Japitana</div><div class="member-role">Database</div></div>
+        <div class="member-card"><div class="member-name">Avila</div><div class="member-role">Register Donor</div></div>
+        <div class="member-card"><div class="member-name">Duyanen</div><div class="member-role">View Donors</div></div>
+        <div class="member-card"><div class="member-name">Sorcoso</div><div class="member-role">Update/Delete</div></div>
+        <div class="member-card"><div class="member-name">Gonzales</div><div class="member-role">Inventory</div></div>
+        <div class="member-card"><div class="member-name">Balingit</div><div class="member-role">Reports & CSV</div></div>
+        <div class="member-card"><div class="member-name">Nasol</div><div class="member-role">System Settings</div></div>
+        <div class="member-card"><div class="member-name">Macahilig</div><div class="member-role">Screenshots</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 2: PROJECT TITLE ==================== -->
+  <section class="slide" id="slide2" data-slide="2">
+    <div class="slide-meta">
+      <span class="slide-number">02 / 13</span>
+      <div class="progress-bar"><div class="progress-fill" style="width: 15.4%"></div></div>
+    </div>
+    
+    <div class="slide-content">
+      <div class="slide-label">Project Title</div>
+      <h2 class="slide-title">BloodLink <span>🩸</span></h2>
+      <p class="slide-subtitle">A comprehensive digital solution for managing blood donors, tracking inventory levels, and generating analytical reports for blood banks.</p>
+      <div class="heading-divider"></div>
+      
+      <div class="info-box">
+        <strong>🩸 BloodLink</strong> is a Java-based desktop application built with Java Swing and MySQL. It implements role-based access control, real-time data synchronization, and a modern glassmorphism UI designed for healthcare professionals.
+      </div>
+      
+      <div class="info-badges">
+        <div class="info-badge"><i class="fas fa-desktop"></i> <strong>Platform:</strong> Java Desktop App</div>
+        <div class="info-badge"><i class="fas fa-database"></i> <strong>Database:</strong> MySQL (XAMPP)</div>
+        <div class="info-badge"><i class="fas fa-code"></i> <strong>Framework:</strong> Java Swing</div>
+        <div class="info-badge"><i class="fas fa-users"></i> <strong>Group:</strong> Group 1</div>
+        <div class="info-badge"><i class="fas fa-shield-alt"></i> <strong>Security:</strong> PreparedStatement + RBAC</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 3: FEATURES ==================== -->
+  <section class="slide" id="slide3" data-slide="3">
+    <div class="slide-meta">
+      <span class="slide-number">03 / 13</span>
+      <div class="progress-bar"><div class="progress-fill" style="width: 23.1%"></div></div>
+    </div>
+    
+    <div class="slide-content">
+      <div class="slide-label">Overview</div>
+      <h2 class="slide-title">Key <span>Features</span></h2>
+      <div class="heading-divider"></div>
+      
+      <div class="info-box" style="margin-bottom: var(--space-lg);">
+        BloodLink streamlines blood bank operations through seven integrated modules. Each feature is designed with user experience and data integrity in mind.
+      </div>
+      
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+          <div class="feature-title">Dashboard Overview</div>
+          <div class="feature-desc">Real-time statistics: total donors, blood units, critical alerts, and recent donations with live clock.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-user-shield"></i></div>
+          <div class="feature-title">Role-Based Access</div>
+          <div class="feature-desc">Two-tier system: Admin (full access) and Staff (restricted) with session management via UserSession.java.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-user-plus"></i></div>
+          <div class="feature-title">Donor Registration</div>
+          <div class="feature-desc">Collect donor details with validation. Auto-updates inventory upon successful registration.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-users"></i></div>
+          <div class="feature-title">Donor Management</div>
+          <div class="feature-desc">Full CRUD operations with search/filter capabilities using SQL LIKE queries.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-tint"></i></div>
+          <div class="feature-title">Inventory Tracking</div>
+          <div class="feature-desc">Real-time stock monitoring with color-coded CRITICAL alerts when units drop below threshold.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-chart-pie"></i></div>
+          <div class="feature-title">Reports & Analytics</div>
+          <div class="feature-desc">Monthly trends and distribution reports for easy tracking and analysis of blood bank data.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-cogs"></i></div>
+          <div class="feature-title">System Settings</div>
+          <div class="feature-desc">Admin-exclusive user management: add/delete accounts, password changes, system info display.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 4: LOGIN SCREENSHOT ==================== -->
+  <section class="slide" id="slide4" data-slide="4">
+    <div class="slide-meta">
+      <span class="slide-number">04 / 13</span>
+      <div class="progress-bar"><div class="progress-fill" style="width: 30.8%"></div></div>
+    </div>
+    
+    <div class="slide-content">
+      <div class="slide-label">Screenshot</div>
+      <h2 class="slide-title">Login <span>Form</span></h2>
+      <div class="heading-divider"></div>
+      
+      <!-- LOGIN SCREENSHOT -->
+      <div class="screenshot-frame" onclick="this.classList.toggle('enlarged')" title="Login Form Screenshot">
+        <img src="../screenshots/Login.png" alt="Login Form Screenshot">
+      </div>
+      
+      <div class="info-box">
+        <strong>Description:</strong> Secure entry point with username/password authentication. Validates credentials against MySQL <code>users</code> table using PreparedStatement. Detects user role and redirects to Dashboard. Features "Show Password" toggle for accessibility.
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 5: DASHBOARD SCREENSHOT ==================== -->
+  <section class="slide" id="slide5" data-slide="5">
+    <div class="slide-meta">
+      <span class="slide-number">05 / 13</span>
+      <div class="progress-bar"><div class="progress-fill" style="width: 38.5%"></div></div>
+    </div>
+    
+    <div class="slide-content">
+      <div class="slide-label">Screenshot</div>
+      <h2 class="slide-title">Dashboard <span>Overview</span></h2>
+      <div class="heading-divider"></div>
+      
+      <!-- DASHBOARD SCREENSHOT -->
+      <div class="screenshot-frame" onclick="this.classList.toggle('enlarged')" title="Dashboard Screenshot">
+        <img src="../screenshots/Dashboard.png" alt="Dashboard Screenshot">
+      </div>
+      
+      <div class="info-box">
+        <strong>Description:</strong> Central hub displaying real-time statistics: <strong>Total Donors</strong> (COUNT), <strong>Available Blood Units</strong> (SUM), <strong>Critical Blood Types</strong> (stock &lt; 5 units shown in red), and <strong>Recent Donations</strong> (last 7 days). Features a live digital clock and role badge.
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 6: REGISTER DONOR SCREENSHOT ==================== -->
+  <section class="slide" id="slide6" data-slide="6">
+    <div class="slide-meta">
+      <span class="slide-number">06 / 13</span>
+      <div class="progress-bar"><div class="progress-fill" style="width: 46.2%"></div></div>
+    </div>
+    
+    <div class="slide-content">
+      <div class="slide-label">Screenshot</div>
+      <h2 class="slide-title">Register <span>Donor</span></h2>
+      <div class="heading-divider"></div>
+      
+      <!-- REGISTER DONOR SCREENSHOT -->
+      <div class="screenshot-frame" onclick="this.classList.toggle('enlarged')" title="Register Donor Screenshot">
+        <img src="../screenshots/Register Donors.png" alt="Register Donor Screenshot">
+      </div>
+      
+      <div class="info-box">
+        <strong>Description:</strong> Data entry form for new blood donors. Collects Name, Age (validated: 18–65), Blood Type, Phone, Address, and Donation Date. Upon saving, data is inserted into the <strong>donors</strong> table via SQL INSERT and the <strong>blood_inventory</strong> table is automatically updated (+1 unit).
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 7: VIEW DONORS SCREENSHOT ==================== -->
+  <section class="slide" id="slide7" data-slide="7">
+    <div class="slide-meta">
+      <span class="slide-number">07 / 13</span>
+      <div class="progress-bar"><div class="progress-fill" style="width: 53.8%"></div></div>
+    </div>
+    
+    <div class="slide-content">
+      <div class="slide-label">Screenshot</div>
+      <h2 class="slide-title">View <span>Donors</span></h2>
+      <div class="heading-divider"></div>
+      
+      <!-- VIEW DONORS SCREENSHOT -->
+      <div class="screenshot-frame" onclick="this.classList.toggle('enlarged')" title="View Donors Screenshot">
+        <img src="../screenshots/View Donors.png" alt="View Donors Screenshot">
+      </div>
+      
+      <div class="info-box">
+        <strong>Description:</strong> Displays all registered donors in a JTable. Features a <strong>search bar</strong> (filters by name or blood type using SQL LIKE), <strong>Update</strong> button (edits selected donor), and <strong>Delete</strong> button (removes record with confirmation dialog). Records ordered by most recent donation.
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 8: INVENTORY SCREENSHOT ==================== -->
+  <section class="slide" id="slide8" data-slide="8">
+    <div class="slide-meta">
+      <span class="slide-number">08 / 13</span>
+      <div class="progress-bar"><div class="progress-fill" style="width: 61.5%"></div></div>
+    </div>
+    
+    <div class="slide-content">
+      <div class="slide-label">Screenshot</div>
+      <h2 class="slide-title">Blood <span>Inventory</span></h2>
+      <div class="heading-divider"></div>
+      
+      <!-- INVENTORY SCREENSHOT -->
+      <div class="screenshot-frame" onclick="this.classList.toggle('enlarged')" title="Blood Inventory Screenshot">
+        <img src="../screenshots/Blood Inventory.png" alt="Blood Inventory Screenshot">
+      </div>
+      
+      <div class="info-box">
+        <strong>Description:</strong> Shows current stock of all 8 blood types (A+, A−, B+, B−, O+, O−, AB+, AB−). Rows are <strong>color-coded RED</strong> and marked "CRITICAL" when stock falls below 5 units. Includes search filter and refresh button. Inventory auto-updates when a new donor is registered.
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 9: REPORTS SCREENSHOT ==================== -->
+  <section class="slide" id="slide9" data-slide="9">
+    <div class="slide-meta">
+      <span class="slide-number">09 / 13</span>
+      <div class="progress-bar"><div class="progress-fill" style="width: 69.2%"></div></div>
+    </div>
+    
+    <div class="slide-content">
+      <div class="slide-label">Screenshot</div>
+      <h2 class="slide-title">Reports <span>&amp; Analytics</span></h2>
+      <div class="heading-divider"></div>
+      
+      <!-- REPORTS SCREENSHOT -->
+      <div class="screenshot-frame" onclick="this.classList.toggle('enlarged')" title="Reports & Analytics Screenshot">
+        <img src="../screenshots/Reports & Analytics.png" alt="Reports & Analytics Screenshot">
+      </div>
+      
+      <div class="info-box">
+        <strong>Description:</strong> Analytical module with two tables: <strong>Donation Summary</strong> (monthly trends grouped by YEAR/MONTH) and <strong>Inventory Status</strong> (blood type distribution with CRITICAL/LOW/ADEQUATE status).
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 10: SETTINGS SCREENSHOT ==================== -->
+  <section class="slide" id="slide10" data-slide="10">
+    <div class="slide-meta">
+      <span class="slide-number">10 / 13</span>
+      <div class="progress-bar"><div class="progress-fill" style="width: 76.9%"></div></div>
+    </div>
+    
+    <div class="slide-content">
+      <div class="slide-label">Screenshot</div>
+      <h2 class="slide-title">System <span>Settings</span></h2>
+      <div class="heading-divider"></div>
+      
+      <!-- SETTINGS SCREENSHOTS -->
+      <div style="display: flex; gap: var(--space-md); max-width: 1200px; width: 100%; justify-content: center; align-items: center;">
+        <div class="screenshot-frame" onclick="this.classList.toggle('enlarged')" style="flex: 1;" title="User Management Screenshot">
+          <img src="../screenshots/System Settings.png" alt="User Management Screenshot" style="max-height: 48vh;">
+        </div>
+        <div class="screenshot-frame" onclick="this.classList.toggle('enlarged')" style="flex: 1;" title="Account Security Screenshot">
+          <img src="../screenshots/System Settings -Change Password user.png" alt="Account Security Screenshot" style="max-height: 48vh;">
+        </div>
+        <div class="screenshot-frame" onclick="this.classList.toggle('enlarged')" style="flex: 1;" title="System Info Screenshot">
+          <img src="../screenshots/System Settings - System Information.png" alt="System Info Screenshot" style="max-height: 48vh;">
+        </div>
+      </div>
+      
+      <div class="info-box">
+        <strong>Description:</strong> Exclusive to <strong>Admin users only</strong>. Contains 3 tabs: (1) <strong>User Management</strong> — view, add, and delete user accounts; (2) <strong>Account Security</strong> — change password with current password verification; (3) <strong>System Info</strong> — displays version, active user, database status.
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 11: SQL STATEMENTS ==================== -->
+  <section class="slide" id="slide11" data-slide="11">
+    <div class="slide-meta">
+      <span class="slide-number">11 / 13</span>
+      <div class="progress-bar"><div class="progress-fill" style="width: 84.6%"></div></div>
+    </div>
+    
+    <div class="slide-content">
+      <div class="slide-label">Database Integration</div>
+      <h2 class="slide-title">SQL <span>Statements</span></h2>
+      <div class="heading-divider"></div>
+      
+      <div class="sql-section">
+        
+        <div class="sql-card">
+          <div class="sql-header"><i class="fas fa-lock"></i> LOGIN — Verify Credentials</div>
+          <pre class="sql-code"><code class="language-sql">SELECT * FROM users
+WHERE username = ? AND password = ?
+-- ? = PreparedStatement placeholder (SQL Injection Protected)</code></pre>
+        </div>
+
+        <div class="sql-card">
+          <div class="sql-header"><i class="fas fa-plus"></i> INSERT — New Donor</div>
+          <pre class="sql-code"><code class="language-sql">INSERT INTO donors (name, age, blood_group, phone, address, donation_date)
+VALUES (?, ?, ?, ?, ?, ?)</code></pre>
+        </div>
+
+        <div class="sql-card">
+          <div class="sql-header"><i class="fas fa-search"></i> SEARCH — Filter Donors</div>
+          <pre class="sql-code"><code class="language-sql">SELECT * FROM donors
+WHERE name LIKE ? OR blood_group LIKE ?
+ORDER BY id DESC
+-- % wildcard matches any characters (e.g., '%O+%' finds all O+ donors)</code></pre>
+        </div>
+
+        <div class="sql-card">
+          <div class="sql-header"><i class="fas fa-edit"></i> UPDATE — Edit Donor</div>
+          <pre class="sql-code"><code class="language-sql">UPDATE donors
+SET name=?, age=?, blood_group=?, phone=?, address=?
+WHERE id = ?
+-- WHERE id = ? ensures only selected donor is updated</code></pre>
+        </div>
+
+        <div class="sql-card">
+          <div class="sql-header"><i class="fas fa-trash"></i> DELETE — Remove Record</div>
+          <pre class="sql-code"><code class="language-sql">DELETE FROM donors
+WHERE id = ?
+-- Permanently removes the record from the database</code></pre>
+        </div>
+
+        <div class="sql-card">
+          <div class="sql-header"><i class="fas fa-list"></i> SELECT — Display All Donors</div>
+          <pre class="sql-code"><code class="language-sql">SELECT id, name, age, blood_group, phone, address, donation_date
+FROM donors
+ORDER BY id DESC
+-- ORDER BY id DESC = newest records appear first</code></pre>
+        </div>
+
+        <div class="sql-card">
+          <div class="sql-header"><i class="fas fa-filter"></i> FILTER — Critical Stock</div>
+          <pre class="sql-code"><code class="language-sql">SELECT blood_group, available_units
+FROM blood_inventory
+WHERE available_units &lt; 5
+ORDER BY blood_group ASC
+-- Filters blood types with CRITICAL stock (&lt; 5 units)</code></pre>
+        </div>
+
+        <div class="sql-card">
+          <div class="sql-header"><i class="fas fa-chart-bar"></i> REPORTS — Monthly Trends</div>
+          <pre class="sql-code"><code class="language-sql">SELECT MONTHNAME(donation_date) as month,
+       YEAR(donation_date) as year,
+       COUNT(*) as total_donations
+FROM donors
+GROUP BY YEAR(donation_date), MONTH(donation_date)
+ORDER BY year DESC, month DESC</code></pre>
+        </div>
+
+        <div class="sql-card">
+          <div class="sql-header"><i class="fas fa-sync"></i> AUTO-UPDATE — Inventory Sync</div>
+          <pre class="sql-code"><code class="language-sql">UPDATE blood_inventory
+SET available_units = available_units + 1
+WHERE blood_group = ?
+-- Automatically adds 1 unit when new donor is registered</code></pre>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 12: DATABASE SCHEMA ==================== -->
+  <section class="slide" id="slide12" data-slide="12">
+    <div class="slide-meta">
+      <span class="slide-number">12 / 13</span>
+      <div class="progress-bar"><div class="progress-fill" style="width: 92.3%"></div></div>
+    </div>
+    
+    <div class="slide-content">
+      <div class="slide-label">Database Architecture</div>
+      <h2 class="slide-title">Schema <span>&amp; ERD</span></h2>
+      <div class="heading-divider"></div>
+      
+      <div class="schema-container">
+        
+        <table class="schema-table">
+          <thead><tr><th>Column</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td class="pk">id</td><td class="type">INT (PK, AI)</td><td>Unique ID (auto-generated)</td></tr>
+            <tr><td>name</td><td class="type">VARCHAR(100)</td><td>Full name of donor</td></tr>
+            <tr><td>age</td><td class="type">INT</td><td>Age (18–65 valid range)</td></tr>
+            <tr><td>blood_group</td><td class="type">VARCHAR(5)</td><td>Blood type (A+, O−, etc.)</td></tr>
+            <tr><td>phone</td><td class="type">VARCHAR(20)</td><td>Contact number</td></tr>
+            <tr><td>address</td><td class="type">VARCHAR(255)</td><td>Home address</td></tr>
+            <tr><td>donation_date</td><td class="type">DATE</td><td>Date of donation</td></tr>
+          </tbody>
+        </table>
+
+        <table class="schema-table">
+          <thead><tr><th>Column</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td class="pk">id</td><td class="type">INT (PK, AI)</td><td>Unique user ID</td></tr>
+            <tr><td>username</td><td class="type">VARCHAR(50)</td><td>Login username (UNIQUE)</td></tr>
+            <tr><td>password</td><td class="type">VARCHAR(255)</td><td>Login password</td></tr>
+            <tr><td>full_name</td><td class="type">VARCHAR(100)</td><td>Display name</td></tr>
+            <tr><td>role</td><td class="type">VARCHAR(10)</td><td>Admin or Staff</td></tr>
+          </tbody>
+        </table>
+
+        <table class="schema-table">
+          <thead><tr><th>Column</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td class="pk">id</td><td class="type">INT (PK, AI)</td><td>Unique row ID</td></tr>
+            <tr><td>blood_group</td><td class="type">VARCHAR(5)</td><td>Blood type (A+, O−, etc.)</td></tr>
+            <tr><td>available_units</td><td class="type">INT</td><td>Number of units in stock</td></tr>
+          </tbody>
+        </table>
+
+      </div>
+      
+      <div class="heading-divider" style="margin: var(--space-lg) auto;"></div>
+      
+      <div class="erd-container">
+        <div class="erd-diagram">
+          
+          <div class="erd-entity">
+            <div class="erd-entity-title">🧑 donors</div>
+            <div class="erd-field"><span class="pk">🔑</span> id (PK, AI)</div>
+            <div class="erd-field">name (VARCHAR)</div>
+            <div class="erd-field">age (INT)</div>
+            <div class="erd-field"><span class="fk">🔗</span> blood_group (FK)</div>
+            <div class="erd-field">phone, address</div>
+            <div class="erd-field">donation_date (DATE)</div>
+          </div>
+          
+          <div class="erd-connector">
+            <div class="line"></div>
+            <span>Many-to-One</span>
+          </div>
+          
+          <div class="erd-entity">
+            <div class="erd-entity-title">🩸 blood_inventory</div>
+            <div class="erd-field"><span class="pk">🔑</span> id (PK, AI)</div>
+            <div class="erd-field"><span class="pk">🔗</span> blood_group (PK ref)</div>
+            <div class="erd-field">available_units (INT)</div>
+          </div>
+          
+        </div>
+        
+        <div class="erd-legend">
+          <div class="legend-item"><span class="legend-dot pk"></span> Primary Key</div>
+          <div class="legend-item"><span class="legend-dot fk"></span> Foreign Key</div>
+          <div class="legend-item"><span class="legend-dot role"></span> Role-Based Access</div>
+          <div class="legend-item"><i class="fas fa-sync" style="color:var(--crimson-light)"></i> Auto-Sync Logic</div>
+        </div>
+      </div>
+      
+      <div class="info-box" style="margin-top: var(--space-md);">
+        <i class="fas fa-camera"></i> <strong>Pro Tip:</strong> Replace the ERD diagram above with an actual screenshot from your MySQL Workbench or draw.io for maximum impact during defense.
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 13: DEMO ==================== -->
+  <section class="slide slide-demo" id="slide13" data-slide="13">
+    <div class="slide-meta">
+      <span class="slide-number">13 / 13</span>
+      <div class="progress-bar"><div class="progress-fill" style="width: 100%"></div></div>
+    </div>
+
+    <!-- UNIVERSITY OF MAKATI BRANDING TOP LEFT -->
+    <div class="umak-branding">
+      <div class="branding-logos">
+        <div class="umak-logo-small" title="University of Makati">
+          <img src="../images/UMak-Logo-Registered-Favicon.png" alt="University of Makati Logo">
+        </div>
+        <div class="umak-logo-small" title="CCIS">
+          <img src="../images/CCIS-Logo-Official-1-1-705x705.png" alt="CCIS Logo">
+        </div>
+      </div>
+      <div class="branding-texts">
+        <div class="umak-text">UNIVERSITY OF MAKATI</div>
+        <div class="ccis-text">College of Computing and Information Sciences</div>
+      </div>
+    </div>
+
+    <div class="slide-content">
+      <!-- BLOODLINK LOGO -->
+      <div class="logo-placeholder" title="BloodLink Logo" style="width: 120px; height: 120px; margin-bottom: 0;">
+        <img src="../images/bloodlink-logo.png" alt="BloodLink Logo">
+      </div>
+
+      <h2 class="demo-title" style="margin-bottom: var(--space-xs);">DEMO TIME</h2>
+      <p class="demo-subtitle" style="margin-bottom: var(--space-sm);">Live Program Demonstration</p>
+      
+      <div class="info-box" style="max-width: 700px; margin: 0 auto var(--space-sm);">
+        Run the BloodLink application and demonstrate the complete user journey:
+      </div>
+      
+      <div class="demo-steps">
+        <div class="demo-step"><i class="fas fa-sign-in-alt"></i> Login (Admin & Staff)</div>
+        <div class="demo-step"><i class="fas fa-home"></i> Dashboard Stats</div>
+        <div class="demo-step"><i class="fas fa-user-plus"></i> Register New Donor</div>
+        <div class="demo-step"><i class="fas fa-users"></i> View & Search Donors</div>
+        <div class="demo-step"><i class="fas fa-edit"></i> Update Record</div>
+        <div class="demo-step"><i class="fas fa-trash"></i> Delete Record</div>
+        <div class="demo-step"><i class="fas fa-tint"></i> Inventory Alerts</div>
+        <div class="demo-step"><i class="fas fa-chart-bar"></i> View Reports</div>
+        <div class="demo-step"><i class="fas fa-cog"></i> Admin Settings</div>
+      </div>
+      
+      <p class="demo-footer">— Group 1 • COMPROG2 & INFOMAN • University of Makati —</p>
+    </div>
+  </section>
+
+</div>
+
+<!-- ==================== JAVASCRIPT: NAVIGATION & INTERACTIONS ==================== -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+
+<script>
+  // ==================== SLIDE NAVIGATION ====================
+  const slides = document.querySelectorAll('.slide');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const fullscreenBtn = document.getElementById('fullscreenBtn');
+  const navControls = document.getElementById('navControls');
+  let currentSlide = 0;
+
+  function goToSlide(index) {
+    if (index < 0) index = 0;
+    if (index >= slides.length) index = slides.length - 1;
+    
+    currentSlide = index;
+    slides.forEach((slide, i) => {
+      slide.style.display = i === index ? 'flex' : 'none';
+    });
+    
+    // Update progress bar
+    const progress = ((index + 1) / slides.length) * 100;
+    document.querySelectorAll('.progress-fill').forEach(fill => {
+      fill.style.width = `${progress}%`;
+    });
+    
+    // Update slide numbers
+    document.querySelectorAll('.slide-number').forEach(num => {
+      num.textContent = `${String(index + 1).padStart(2, '0')} / ${slides.length}`;
+    });
+    
+    // Update button states
+    prevBtn.disabled = index === 0;
+    nextBtn.disabled = index === slides.length - 1;
+    
+    // Show nav controls after first interaction
+    navControls.classList.add('visible');
+    
+    // Scroll to top of slide
+    window.scrollTo(0, 0);
+  }
+
+  // Initialize
+  goToSlide(0);
+
+  // Button listeners
+  prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
+  nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      goToSlide(currentSlide - 1);
+    } else if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+      e.preventDefault(); // Prevent page scroll on spacebar
+      goToSlide(currentSlide + 1);
+    } else if (e.key === 'f' || e.key === 'F') {
+      toggleFullscreen();
+    } else if (e.key === 'Escape') {
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      }
+    }
+  });
+
+  // Fullscreen toggle
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      document.getElementById('presentation').requestFullscreen().catch(err => {
+        console.log(`Error attempting to enable fullscreen: ${err.message}`);
+      });
+      fullscreenBtn.innerHTML = '<i class="fas fa-compress"></i>';
+    } else {
+      document.exitFullscreen();
+      fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
+    }
+  }
+  fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+  // ==================== PRESENTER TOOLS ====================
+  const notesToggle = document.getElementById('notesToggle');
+  const jumpBtn = document.getElementById('jumpBtn');
+  let notesVisible = false;
+
+  notesToggle.addEventListener('click', () => {
+    notesVisible = !notesVisible;
+    notesToggle.classList.toggle('active', notesVisible);
+    
+    if (notesVisible) {
+      // Show presenter notes (you can add a notes panel here)
+      alert('Presenter Notes:\n\n• Speak clearly and confidently\n• Demonstrate each feature step-by-step\n• Highlight the role-based access control\n• Show the Reports and Analytics feature\n• Prepare for SQL-related questions');
+    }
+  });
+
+  jumpBtn.addEventListener('click', () => {
+    const slideNum = prompt(`Jump to slide (1-${slides.length}):`, currentSlide + 1);
+    if (slideNum && !isNaN(slideNum)) {
+      goToSlide(parseInt(slideNum) - 1);
+    }
+  });
+
+  // ==================== SCREENSHOT ENLARGE ====================
+  document.querySelectorAll('.screenshot-frame').forEach(frame => {
+    frame.addEventListener('click', function(e) {
+      // Prevent toggle if clicking on child elements that shouldn't trigger
+      if (e.target.closest('.screenshot-hint')) return;
+      this.classList.toggle('enlarged');
+    });
+  });
+
+  // ==================== ANIMATION ON SCROLL (Optional Enhancement) ====================
+  // Add intersection observer for fade-in animations if needed
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, observerOptions);
+
+  // Observe animated elements
+  document.querySelectorAll('.feature-card, .sql-card, .schema-table, .erd-container').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+    observer.observe(el);
+  });
+
+  // ==================== PRISM JS INIT ====================
+  Prism.highlightAll();
+</script>
+
+</body>
+</html>
